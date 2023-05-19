@@ -55,11 +55,11 @@ const MyPostWidget = ({ picturePath }) => {
    body: formData
   })
   const posts = await response.json()
-  dispatch(setPosts({ posts }))
+  dispatch(setPosts({ posts: posts.reverse() }))
   setImage(null)
   setPost("")
  }
- 
+
  return (
   <WidgetWrapper>
    <FlexBetween gap="1.5rem">

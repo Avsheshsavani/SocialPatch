@@ -4,7 +4,7 @@ import { setPosts } from "state"
 import PostWidget from "./PostWidget"
 import { GlobalVariable } from "util/globleVariable"
 
-const main_url=GlobalVariable.apiUrl.mailUrl
+const main_url = GlobalVariable.apiUrl.mailUrl
 
 const PostsWidget = ({ userId, isProfile = false }) => {
  const dispatch = useDispatch()
@@ -50,7 +50,8 @@ const PostsWidget = ({ userId, isProfile = false }) => {
      picturePath,
      userPicturePath,
      likes,
-     comments
+     comments,
+     updatedAt
     }) => (
      <PostWidget
       key={_id}
@@ -63,6 +64,7 @@ const PostsWidget = ({ userId, isProfile = false }) => {
       userPicturePath={userPicturePath}
       likes={likes}
       comments={comments}
+      time={updatedAt}
      />
     )
    )}
