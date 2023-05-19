@@ -32,9 +32,9 @@ const PostWidget = ({
  picturePath,
  userPicturePath,
  likes,
- comments
+ comments,
+ time
 }) => {
-  console.log(comments)
  const [isComments, setIsComments] = useState(false)
  const [commentData,setCommentdata] = useState("")
  const dispatch = useDispatch()
@@ -84,6 +84,7 @@ const PostWidget = ({
     subtitle={location}
     userPicturePath={userPicturePath}
     isSameUser={loggedInUserId !== postUserId ? true : false}
+    time={time}
    />
 
    <Typography color={main} sx={{ mt: "1rem" }}>

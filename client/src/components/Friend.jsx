@@ -6,15 +6,24 @@ import { setFriends } from "state"
 import FlexBetween from "./FlexBetween"
 import UserImage from "./UserImage"
 import { GlobalVariable } from "util/globleVariable"
+import moment from "moment"
 
-const main_url=GlobalVariable.apiUrl.mailUrl
+const main_url = GlobalVariable.apiUrl.mailUrl
 
-const Friend = ({ friendId, name, subtitle, userPicturePath,isSameUser }) => {
+const Friend = ({
+ friendId,
+ name,
+ subtitle,
+ userPicturePath,
+ isSameUser,
+ time
+}) => {
  const dispatch = useDispatch()
  const navigate = useNavigate()
  const { _id } = useSelector((state) => state.user)
  const token = useSelector((state) => state.token)
- const friends = useSelector((state) => state.user.friends)
+
+ const friends = useSelector((state) => state?.user?.friends)
 
  const { palette } = useTheme()
  const primaryLight = palette.primary.light
@@ -22,19 +31,16 @@ const Friend = ({ friendId, name, subtitle, userPicturePath,isSameUser }) => {
  const main = palette.neutral.main
  const medium = palette.neutral.medium
 
- const isFriend = friends.find((friend) => friend._id === friendId)
+ const isFriend = friends?.find((friend) => friend._id === friendId)
 
  const patchFriend = async () => {
-  const response = await fetch(
-   `${main_url}/users/${_id}/${friendId}`,
-   {
-    method: "PATCH",
-    headers: {
-     Authorization: `Bearer ${token}`,
-     "Content-Type": "application/json"
-    }
+  const response = await fetch(`${main_url}/users/${_id}/${friendId}`, {
+   method: "PATCH",
+   headers: {
+    Authorization: `Bearer ${token}`,
+    "Content-Type": "application/json"
    }
-  )
+  })
   const data = await response.json()
   dispatch(setFriends({ friends: data }))
  }
@@ -66,20 +72,33 @@ const Friend = ({ friendId, name, subtitle, userPicturePath,isSameUser }) => {
       {subtitle}
      </Typography>
     </Box>
+    <Typography
+     color={medium}
+     variant="h5"
+     fontWeight="500"
+     sx={{
+      alignSelf: "start",
+      marginTop: "10px",
+      fontSize: "0.8rem"
+     }}
+    >
+     {moment(time).format("MMM Do YY, h:mm a")}
+    </Typography>
    </FlexBetween>
-   {isSameUser ?
-   <IconButton
-    onClick={() => patchFriend()}
-    sx={{ backgroundColor: primaryLight, p: "0.6rem" }}
-   >
-    {isFriend ? (
-     <PersonRemoveOutlined sx={{ color: primaryDark }} />
-    ) : (
-     <PersonAddOutlined sx={{ color: primaryDark }} />
-    )}
-   </IconButton>
-   :
-   <></>}
+   {isSameUser ? (
+    <IconButton
+     onClick={() => patchFriend()}
+     sx={{ backgroundColor: primaryLight, p: "0.6rem" }}
+    >
+     {isFriend ? (
+      <PersonRemoveOutlined sx={{ color: primaryDark }} />
+     ) : (
+      <PersonAddOutlined sx={{ color: primaryDark }} />
+     )}
+    </IconButton>
+   ) : (
+    <></>
+   )}
   </FlexBetween>
  )
 }
