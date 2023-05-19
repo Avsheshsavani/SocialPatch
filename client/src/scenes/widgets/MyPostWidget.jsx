@@ -25,6 +25,7 @@ import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { setPosts } from "state"
 import { GlobalVariable } from "util/globleVariable"
+import axios from "axios"
 
 const main_url=GlobalVariable.apiUrl.mailUrl
 
@@ -42,12 +43,16 @@ const MyPostWidget = ({ picturePath }) => {
 
  const handlePost = async () => {
   const formData = new FormData()
+
+  if (image) {
+    formData.append("file", image)
+    formData.append("upload_preset","social123")
+    let url = await axios.post("https://api.cloudinary.com/v1_1/dcoypacf9/image/upload",formData).then((res) => res.data.url).catch((error) => console.log(error))
+   formData.append("picturePath", url)
+  }
+
   formData.append("userId", _id)
   formData.append("description", post)
-  if (image) {
-   formData.append("picture", image)
-   formData.append("picturePath", image.name)
-  }
 
   const response = await fetch(`${main_url}/posts`, {
    method: "POST",

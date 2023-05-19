@@ -16,6 +16,7 @@ import { setLogin } from "state"
 import Dropzone from "react-dropzone"
 import FlexBetween from "components/FlexBetween"
 import { GlobalVariable } from "util/globleVariable"
+import  axios  from "axios"
 
 const main_url=GlobalVariable.apiUrl.mailUrl
 
@@ -61,10 +62,14 @@ const Form = () => {
  const register = async (values, onSubmitProps) => {
   // this allows us to send form info with image
   const formData = new FormData()
+  formData.append("file", values.picture)
+  formData.append("upload_preset","social123")
+  let url = await axios.post("https://api.cloudinary.com/v1_1/dcoypacf9/image/upload",formData).then((res) => res.data.url).catch((error) => console.log(error))
+
   for (let value in values) {
-   formData.append(value, values[value])
+    formData.append(value, values[value])
   }
-  formData.append("picturePath", values.picture.name)
+  formData.append("picturePath", url)
 
   const savedUserResponse = await fetch(`${main_url}/auth/register`, {
    method: "POST",
