@@ -16,9 +16,9 @@ import { setLogin } from "state"
 import Dropzone from "react-dropzone"
 import FlexBetween from "components/FlexBetween"
 import { GlobalVariable } from "util/globleVariable"
-import  axios  from "axios"
+import axios from "axios"
 
-const main_url=GlobalVariable.apiUrl.mailUrl
+const main_url = GlobalVariable.apiUrl.mailUrl
 
 const registerSchema = yup.object().shape({
  firstName: yup.string().required("required"),
@@ -63,17 +63,21 @@ const Form = () => {
   // this allows us to send form info with image
   const formData = new FormData()
   formData.append("file", values.picture)
-  formData.append("upload_preset","social123")
-  let url = await axios.post("https://api.cloudinary.com/v1_1/dcoypacf9/image/upload",formData).then((res) => res.data.url).catch((error) => console.log(error))
+  formData.append("upload_preset", "social123")
+  let url = await axios
+   .post("https://api.cloudinary.com/v1_1/dcoypacf9/image/upload", formData)
+   .then((res) => res.data.url)
+   .catch((error) => console.log(error))
 
-  for (let value in values) {
-    formData.append(value, values[value])
-  }
-  formData.append("picturePath", url)
-
+  delete values["picture"]
+  values["picturePath"] = url
+  console.log(values)
   const savedUserResponse = await fetch(`${main_url}/auth/register`, {
    method: "POST",
-   body: formData
+   body: JSON.stringify(values),
+   header: {
+    contentType: "application/json"
+   }
   })
   const savedUser = await savedUserResponse.json()
   onSubmitProps.resetForm()
