@@ -17,6 +17,8 @@ import Dropzone from "react-dropzone"
 import FlexBetween from "components/FlexBetween"
 import { GlobalVariable } from "util/globleVariable"
 import axios from "axios"
+import { ToastContainer, toast } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
 
 const main_url = GlobalVariable.apiUrl.mailUrl
 
@@ -52,6 +54,7 @@ const initialValuesLogin = {
 
 const Form = () => {
  const [pageType, setPageType] = useState("login")
+ const [loading,setLoading] = useState(false)
  const { palette } = useTheme()
  const dispatch = useDispatch()
  const navigate = useNavigate()
@@ -60,6 +63,7 @@ const Form = () => {
  const isRegister = pageType === "register"
 
  const register = async (values, onSubmitProps) => {
+  setLoading(true)
   // this allows us to send form info with image
   const formData = new FormData()
   formData.append("file", values.picture)
@@ -70,15 +74,25 @@ const Form = () => {
    .catch((error) => console.log(error))
 
   delete values["picture"]
-  values["picturePath"] = url
-  console.log(values)
+  formData.delete("file")
+  formData.delete("upload_preset")
+  for (const value in values) {
+   formData.append(value, values[value])
+  }
+  formData.append("picturePath", url)
+
   const savedUserResponse = await fetch(`${main_url}/auth/register`, {
    method: "POST",
-   body: JSON.stringify(values),
-   header: {
-    contentType: "application/json"
-   }
+   body: formData
   })
+  if (savedUserResponse.status === 201) {
+    setLoading(false)
+   toast.success("Successfully Created", { autoClose: 3000 })
+  } else {
+    setLoading(false)
+   return false
+  }
+  setLoading(false)
   const savedUser = await savedUserResponse.json()
   onSubmitProps.resetForm()
 
@@ -239,6 +253,7 @@ const Form = () => {
      <Box>
       <Button
        fullWidth
+       disabled = {loading}
        type="submit"
        sx={{
         m: "2rem 0",
@@ -269,6 +284,7 @@ const Form = () => {
         : "Already have an account? Login here."}
       </Typography>
      </Box>
+     <ToastContainer />
     </form>
    )}
   </Formik>

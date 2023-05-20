@@ -18,6 +18,7 @@ const Friend = ({
  isSameUser,
  time
 }) => {
+
  const dispatch = useDispatch()
  const navigate = useNavigate()
  const { _id } = useSelector((state) => state.user)
@@ -72,18 +73,20 @@ const Friend = ({
       {subtitle}
      </Typography>
     </Box>
-    <Typography
-     color={medium}
-     variant="h5"
-     fontWeight="500"
-     sx={{
-      alignSelf: "start",
-      marginTop: "10px",
-      fontSize: "0.8rem"
-     }}
-    >
-     {moment(time).format("MMM Do YY, h:mm a")}
-    </Typography>
+    {time &&  (
+     <Typography
+      color={medium}
+      variant="h5"
+      fontWeight="500"
+      sx={{
+       alignSelf: "start",
+       marginTop: "10px",
+       fontSize: "0.8rem"
+      }}
+     >
+      {moment(time).format("MMM Do YY, h:mm a")}
+     </Typography>
+    ) }
    </FlexBetween>
    {isSameUser ? (
     <IconButton

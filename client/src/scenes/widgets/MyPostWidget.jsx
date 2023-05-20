@@ -32,6 +32,7 @@ const main_url=GlobalVariable.apiUrl.mailUrl
 const MyPostWidget = ({ picturePath }) => {
  const dispatch = useDispatch()
  const [isImage, setIsImage] = useState(false)
+ const [loading,setLoading] = useState(false)
  const [image, setImage] = useState(null)
  const [post, setPost] = useState("")
  const { palette } = useTheme()
@@ -42,6 +43,7 @@ const MyPostWidget = ({ picturePath }) => {
  const medium = palette.neutral.medium
 
  const handlePost = async () => {
+  setLoading(true)
   const formData = new FormData()
 
   if (image) {
@@ -51,6 +53,9 @@ const MyPostWidget = ({ picturePath }) => {
    formData.append("picturePath", url)
   }
 
+  formData.delete("file")
+  formData.delete("upload_preset")
+
   formData.append("userId", _id)
   formData.append("description", post)
 
@@ -59,6 +64,7 @@ const MyPostWidget = ({ picturePath }) => {
    headers: { Authorization: `Bearer ${token}` },
    body: formData
   })
+  setLoading(false)
   const posts = await response.json()
   dispatch(setPosts({ posts: posts.reverse() }))
   setImage(null)
@@ -155,7 +161,7 @@ const MyPostWidget = ({ picturePath }) => {
     )}
 
     <Button
-     disabled={!post}
+     disabled={!post || loading}
      onClick={handlePost}
      sx={{
       color: palette.background.alt,
