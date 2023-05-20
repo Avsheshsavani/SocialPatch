@@ -25,7 +25,7 @@ const LoginPage = () => {
         backgroundColor={theme.palette.background.alt}
       >
         <Typography fontWeight="500" variant="h5" sx={{ mb: "1.5rem" }}>
-          Welcome to SocialPatch, the Social Media for SocialPatch!
+          Welcome to SocialPatch, the SocialPatch for Social Connection!
         </Typography>
         <Form />
       </Box>
