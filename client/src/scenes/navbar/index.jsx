@@ -56,7 +56,7 @@ const Navbar = () => {
             },
           }}
         >
-          SocioPatch
+          SocialPatch
         </Typography>
         {isNonMobileScreens && (
           <FlexBetween
