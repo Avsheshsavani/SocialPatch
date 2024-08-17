@@ -8,13 +8,20 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 import { themeSettings } from "./theme";
 
+
 function App() {
   const mode = useSelector((state) => state.mode);
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
   const isAuth = Boolean(useSelector((state) => state.token));
 
   return (
-    <div className="app">
+    <div className="app"  style={!isAuth ? {
+      backgroundImage: `url(${("../assets/bg1.jpg")})`,
+      height: '100vh',
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+    } : {}}
+  >
       <BrowserRouter>
         <ThemeProvider theme={theme}>
           <CssBaseline />
