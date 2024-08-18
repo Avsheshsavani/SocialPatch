@@ -15,12 +15,7 @@ function App() {
   const isAuth = Boolean(useSelector((state) => state.token));
 
   return (
-    <div className="app"  style={!isAuth ? {
-      backgroundImage: `url(${("../assets/bg1.jpg")})`,
-      height: '100vh',
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
-    } : {}}
+    <div className="app" 
   >
       <BrowserRouter>
         <ThemeProvider theme={theme}>
